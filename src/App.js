@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import { createEditor, Node } from 'slate'
 import { withReact } from 'slate-react'
 import NoteEditor from './components/NoteEditor'
@@ -20,26 +20,36 @@ const deserialize = string => {
   })
 }
 
-var initItem = 'content-0';
-localStorage.setItem(initItem, 'the first note');
+var initLocation = 'content-0';
+localStorage.setItem(initLocation, 'initial');
 
+let list = JSON.stringify([{id: 1}, {id: 1}, {id: 1}]);
+localStorage.setItem('list1', list);
+let recievedList = JSON.parse(localStorage.getItem('list1'));
+recievedList = [...recievedList, {id: 999}];
+console.log(recievedList)
 
 const App = () => {
   const editor = useMemo(() => withReact(createEditor()), [])
-  const [currentLocation, setCurrentLocation] = useState(initItem);
+  const [currentLocation, setCurrentLocation] = useState(initLocation);
   const [notes, setNotes] = useState([
     {
       id: 0,
-      title: 'note_0'
-    }
+      title: 'note_0',
+      content: 'content-0'
+    },
   ]);
-  const [value, setValue] = useState(deserialize(localStorage.getItem(currentLocation)) || '')
+  if (localStorage.getItem('content-list') === null) {
+    localStorage.setItem('content-list', JSON.stringify(notes));
+  }
+  const [value, setValue] = useState(deserialize(localStorage.getItem(currentLocation)) || '');
 
   const handleClick = (e, id) => {
     e.preventDefault();
     notes.map(note => {
       if (note.id === id) {
-        setCurrentLocation('content-' + note.id.toString())
+        setCurrentLocation(note.content);
+        setValue(deserialize(localStorage.getItem(currentLocation)))
       }
     })
   }
@@ -52,12 +62,17 @@ const App = () => {
     } catch (error) {
       newId = 0;
     }
+    if (localStorage.getItem('content-' + newId.toString()) === null) {
+      localStorage.setItem('content-'+ newId.toString(), 'new note created')
+    }
+    
     const newNote = {
       id: newId || 0,
       title: 'note_' + newId.toString(),
+      content: localStorage.getItem('content-'+ newId.toString())
     }
     setNotes([...notes, newNote]);
-    localStorage.setItem('content-'+ newNote.id.toString(), '')
+    localStorage.setItem('content-list', JSON.stringify(notes));
   }
 
   return (
