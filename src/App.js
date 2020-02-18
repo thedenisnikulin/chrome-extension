@@ -20,59 +20,52 @@ const deserialize = string => {
   })
 }
 
-var initLocation = 'content-0';
-localStorage.setItem(initLocation, 'initial');
-
-let list = JSON.stringify([{id: 1}, {id: 1}, {id: 1}]);
-localStorage.setItem('list1', list);
-let recievedList = JSON.parse(localStorage.getItem('list1'));
-recievedList = [...recievedList, {id: 999}];
-console.log(recievedList)
+var initValue = {
+  id: 0, 
+  title: 'note_0', 
+  content: 'content-0', 
+  text: 'initial note!'
+};
+if (localStorage.getItem(initValue.content) === null) {
+  localStorage.setItem(initValue.content, JSON.stringify(initValue));
+}
 
 const App = () => {
   const editor = useMemo(() => withReact(createEditor()), [])
-  const [currentLocation, setCurrentLocation] = useState(initLocation);
-  const [notes, setNotes] = useState([
-    {
-      id: 0,
-      title: 'note_0',
-      content: 'content-0'
-    },
-  ]);
-  if (localStorage.getItem('content-list') === null) {
-    localStorage.setItem('content-list', JSON.stringify(notes));
-  }
-  const [value, setValue] = useState(deserialize(localStorage.getItem(currentLocation)) || '');
+  const [currentValue, setCurrentValue] = useState(initValue);
+  const [notes, setNotes] = useState(Object.keys(localStorage));
 
-  const handleClick = (e, id) => {
+  const [value, setValue] = useState(JSON.parse(localStorage.getItem(currentValue.content)) || ''); // object
+  const showNote = (e, id) => {
     e.preventDefault();
     notes.map(note => {
-      if (note.id === id) {
-        setCurrentLocation(note.content);
-        setValue(deserialize(localStorage.getItem(currentLocation)))
+    let parsedValue = JSON.parse(localStorage.getItem(note));
+    if (parsedValue.id === id) {
+        setCurrentValue(parsedValue);
+        setValue(currentValue)
       }
     })
   }
-
+  // var arrayOfKeys = Object.keys(localStorage);
+  console.log(notes)
   const addNote = (e) => {
     e.preventDefault();
     let newId;
     try {
-      newId = notes[notes.length-1].id + 1;
+      newId = notes.length;
     } catch (error) {
       newId = 0;
     }
-    if (localStorage.getItem('content-' + newId.toString()) === null) {
-      localStorage.setItem('content-'+ newId.toString(), 'new note created')
-    }
-    
     const newNote = {
       id: newId || 0,
       title: 'note_' + newId.toString(),
-      content: localStorage.getItem('content-'+ newId.toString())
+      content: 'content-' + newId.toString(),
+      text: 'new note is created!',
     }
-    setNotes([...notes, newNote]);
-    localStorage.setItem('content-list', JSON.stringify(notes));
+    if (localStorage.getItem('content-' + newId.toString()) === null) {
+      localStorage.setItem('content-'+ newId.toString(), JSON.stringify(newNote))
+    }
+    setNotes([...notes, newNote.content]);
   }
 
   return (
@@ -82,11 +75,12 @@ const App = () => {
         value={value}
         setValue={setValue}
         serialize={serialize}
-        storageLocation={currentLocation}
+        deserialize={deserialize}
+        storageLocation={currentValue.content}
       />
       <NotesList 
         notes={notes}
-        handleClick={handleClick}
+        showNote={showNote}
         addNote={addNote}
       />
     </div>

@@ -5,8 +5,8 @@ function NotesList(props) {
 		<div>
             {props.notes.map(note =>
                 <Note 
-                    handleClick={props.handleClick}
-                    note={note} 
+                    showNote={props.showNote}
+                    note={JSON.parse(localStorage.getItem(note))} 
                 />
             )}
             <input value='add note' type='button' onClick={(e) => props.addNote(e)} />
@@ -19,7 +19,7 @@ function Note(props) {
         <div>
             {props.note.title}
             <input value='show' type='button' 
-                onClick={(e) => props.handleClick(e, props.note.id)} />
+                onClick={(e) => props.showNote(e, props.note.id)} />
         </div>
     );
 }

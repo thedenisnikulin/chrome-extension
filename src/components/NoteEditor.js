@@ -7,10 +7,10 @@ function NoteEditor(props) {
 		<div>
 			<Slate
 				editor={props.editor}
-				value={props.value}
+				value={props.deserialize(props.value.text)}
 				onChange={value => {
-					props.setValue(value)
-					localStorage.setItem(props.storageLocation, props.serialize(value))
+					props.setValue({...props.value, text: props.serialize(value)})
+					localStorage.setItem(props.storageLocation, JSON.stringify(props.value))
 				}}>
       			<Editable />
     		</Slate>
