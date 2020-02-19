@@ -1,0 +1,8 @@
+{
+    "name": "New tab - Hacknote",
+    "version": "1.0",
+    "chrome_url_overrides": {"newtab": "./public/index.html"},
+    "permissions": ["storage"],
+    "manifest_version": 2
+}
+  

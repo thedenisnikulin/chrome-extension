@@ -1,18 +1,25 @@
-import React, { useState, useMemo } from 'react'
-import { createEditor, Node } from 'slate'
-import { Slate, Editable, withReact } from 'slate-react'
+import React, { useCallback } from 'react'
+import { Editor, Transforms } from 'slate'
+import { Slate, Editable } from 'slate-react'
+
+import TitleChanger from './TitleChanger'
+import '../styles/index.css'
 
 function NoteEditor(props) {
+
 	return(
-		<div>
+		<div className='editor-container'>
+			<TitleChanger titleHandlers={props.titleHandlers} note={props.value} parent={'NoteEditor'}/>
 			<Slate
 				editor={props.editor}
-				value={props.deserialize(props.value.text)}
+				value={props.deserialize(props.value.text.concat(' '))}
 				onChange={value => {
 					props.setValue({...props.value, text: props.serialize(value)})
 					localStorage.setItem(props.storageLocation, JSON.stringify(props.value))
-				}}>
-      			<Editable />
+				}}
+				className='editor'
+			>
+				  <Editable/>
     		</Slate>
 		</div>
 	);
