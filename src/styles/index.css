@@ -1,28 +1,53 @@
+* {
+    outline: none;
+}
+
 body {
     background-color: #1a1a1a;
     color: #FFFFFF;
     font-family: Arial, Helvetica, sans-serif;
+    margin: 0;
 }
 
 .main-container {
     display: flex;
     flex-direction: row;
     justify-content: space-around;
+    height: 20%;
+    max-height: 100vh;
+}
 
+.editor-wrapper {
+    width: 40%;
+    max-height: 70%;
 }
 
 .editor-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    font-size: 1.5rem;
+    overflow-y: auto;
+    max-height: 90%;
+
+}
+
+.editor-container::-webkit-scrollbar {
+    display: none;
+}
+
+.list-wrapper {
     width: 30%;
+    max-height: 70%;
 }
 
 .list {
     display: flex;
     flex-direction: row;
     justify-content: start;
-    width: 30%;
     flex-wrap: wrap;
-    overflow: hidden;
-    max-height: 40rem;
+    max-height: 100%;
+    overflow-y: auto;
 }
 
 .list::-webkit-scrollbar {
@@ -46,7 +71,6 @@ body {
     flex-direction: row;
     justify-content: space-between;
     overflow: hidden;
-    font-weight: 700;
     
 }
 
@@ -58,6 +82,7 @@ body {
     text-overflow: ellipsis;
     background-color: inherit;
     color: #FFFFFF;
+    font-weight: 700;
     border: 0;
 }
 
@@ -68,6 +93,8 @@ body {
 .title-form {
     background-color: inherit;
     border: 0;
+    color: #FFFFFF;
+    height: 200%;
 }
 
 .delete-button {
@@ -85,10 +112,24 @@ body {
 
 .show-button {
     width: inherit;
-    height: inherit;
+    height: 8rem;
     overflow: hidden;
     background-color: #323232;
     border: 0;
+    color: #858585;
+    font-weight: 700;
+    text-overflow: ellipsis;
+
+}
+
+.show-text {
+    height: 70%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: #858585;
+    font-weight: 700;
+    text-align: start;
+    margin: 1rem;
 }
 
 .show-button:hover {
@@ -104,12 +145,9 @@ body {
     color: #858585;
     font-size: 50px;
     border: 0;
+    text-align: center;
 }
 
 .add-button:hover {
-    background-color: #29292956;
-}
-
-.highlighted {
-    color: chartreuse;
+    background-color: #1a1a1a;
 }

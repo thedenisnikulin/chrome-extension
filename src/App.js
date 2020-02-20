@@ -3,7 +3,6 @@ import { createEditor, Node } from 'slate'
 import { withReact } from 'slate-react'
 import NoteEditor from './components/NoteEditor'
 import NotesList from './components/NotesList'
-import TitleChanger from './components/TitleChanger'
 import './styles/index.css'
 
 const serialize = value => {
@@ -25,24 +24,22 @@ const deserialize = string => {
 
 var initValue = {
   id: 0, 
-  title: 'note_0', 
+  title: 'Welcome!', 
   content: 'content-0', 
-  text: 'click "+" to create a note'
+  text: 'Click "+" to create a note'
 };
 
 const App = () => {
   const editor = useMemo(() => withReact(createEditor()), [])
-  const [currentValue, setCurrentValue] = useState(initValue);
   const [notes, setNotes] = useState(Object.keys(localStorage));
-  const [value, setValue] = useState(currentValue || ''); // object
+  const [value, setValue] = useState(JSON.parse(localStorage.getItem(notes[notes.length-1])) || initValue); // object
 
   const showNote = (e, id) => {
     e.preventDefault();
     notes.map(note => {
       let parsedValue = JSON.parse(localStorage.getItem(note));
       if (parsedValue.id === id) {
-        setCurrentValue(parsedValue);
-        setValue(currentValue)
+        setValue(parsedValue)
         console.log(note)
         console.log(notes)
       }
@@ -56,7 +53,7 @@ const App = () => {
       id: newId,
       title: 'note_' + newId.toString(),
       content: 'content-' + newId.toString(),
-      text: 'new note is created!',
+      text: 'type here',
     }
     if (localStorage.getItem('content-' + newId.toString()) === null) {
       localStorage.setItem('content-'+ newId.toString(), JSON.stringify(newNote))
@@ -86,16 +83,16 @@ const App = () => {
     })
   }
   const submitTitle = (e, id) => {
-    e.preventDefault();
-    const form = document.getElementById('form');
-    form.reset();
     setNotes(Object.keys(localStorage))
     notes.map(note => {
       if(note.id === id) {
-        setCurrentValue(JSON.parse(localStorage.getItem(note)))
+        setValue(JSON.parse(localStorage.getItem(note)))
+        localStorage.setItem(JSON.parse(localStorage.getItem(note)))
         setNotes(Object.keys(localStorage))
       }
     });
+    const form = document.getElementById('form');
+    form.reset();
   }
 
   return (
@@ -106,7 +103,7 @@ const App = () => {
         setValue={setValue}
         serialize={serialize}
         deserialize={deserialize}
-        storageLocation={currentValue.content}
+        storageLocation={value.content}
         titleHandlers={[changeTitle, submitTitle]}
       />
       <NotesList 
