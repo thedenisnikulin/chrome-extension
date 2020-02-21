@@ -20,6 +20,7 @@ body {
 .editor-wrapper {
     width: 40%;
     max-height: 70%;
+    margin-top: 5rem;
 }
 
 .editor-container {
@@ -39,6 +40,7 @@ body {
 .list-wrapper {
     width: 30%;
     max-height: 70%;
+    margin-top: 5rem;
 }
 
 .list {
