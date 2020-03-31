@@ -1,6 +1,6 @@
 # Hacknote Extension 
 
-I was seeking such extension but I haven't found one, so I created it by myself!
+I've been looking for such extension but I didn't find one, so I made it by my own.
 
 ![preview](/preview.png)
 
